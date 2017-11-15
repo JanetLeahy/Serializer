@@ -27,8 +27,10 @@ public class BasicArrayObject {
 		for (; i<anArray.length - 1; i++) {
 			str += anArray[i] + ", ";
 		}
-		str += anArray[i] + "])";
-		return str;
+		if (anArray.length > 0) {
+			str += anArray[i] ;
+		}
+		return str + "])";
 	}
 
 }

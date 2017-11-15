@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -41,9 +42,41 @@ public class Serializer {
 		elem.setAttribute("class", name);
 		elem.setAttribute("id", ""+System.identityHashCode(obj));
 		
-		Field[] fields = classObj.getDeclaredFields();
-		for (int i=0; i<fields.length; i++) {
-			elem.addContent(writeField(fields[i], obj));
+		if (obj.getClass().isArray()) {
+			int len = Array.getLength(obj);
+			elem.setAttribute("length", ""+len);
+
+			for (int i=0; i<len; i++) {
+				Object arrayItem = Array.get(obj, i);
+				
+				if (arrayItem == null) {
+					Element valueElem = new Element("value");
+					valueElem.addContent("");
+					elem.addContent(valueElem);
+				}
+				else if (arrayItem.getClass().equals(Integer.class) || arrayItem.getClass().equals(Double.class) ||
+						arrayItem.getClass().equals(Long.class) || arrayItem.getClass().equals(Short.class) ||
+						arrayItem.getClass().equals(Float.class) || arrayItem.getClass().equals(Byte.class) ||
+						arrayItem.getClass().equals(Character.class) || arrayItem.getClass().equals(Boolean.class) ||
+						arrayItem.getClass().equals(String.class)
+						) {
+					Element valueElem = new Element("value");
+					valueElem.addContent(""+arrayItem);
+					elem.addContent(valueElem);
+				}
+				else {
+					Element refElem = new Element("reference");
+					refElem.addContent(""+System.identityHashCode(arrayItem));
+					elem.addContent(refElem);
+				}
+			}
+			
+		}
+		else {
+			Field[] fields = classObj.getDeclaredFields();
+			for (int i=0; i<fields.length; i++) {
+				elem.addContent(writeField(fields[i], obj));
+			}
 		}
 		
 		return elem;
@@ -60,7 +93,12 @@ public class Serializer {
 			value = field.get(obj);
 			String content = "";
 
-			if (value != null && (field.getType().isPrimitive() || field.getType() == String.class)) {
+			if (value == null) {
+				Element valueElem = new Element("value");
+				valueElem.addContent(content);
+				fieldElem.addContent(valueElem);
+			}
+			else if (field.getType().isPrimitive() || field.getType() == String.class) {
 				if (value.getClass() == Integer.class) {
 					content += field.getInt(obj);
 				} else if (value.getClass() == Double.class) {
@@ -86,7 +124,7 @@ public class Serializer {
 				fieldElem.addContent(valueElem);
 
 			}
-			else if (value != null){
+			else {
 				//field contains reference to an object
 				content += System.identityHashCode(value);
 				Element refElem = new Element("reference");
@@ -100,4 +138,5 @@ public class Serializer {
 
 		return fieldElem;
 	}
+	
 }
