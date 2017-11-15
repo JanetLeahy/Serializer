@@ -42,7 +42,7 @@ public class Serializer {
 		elem.setAttribute("class", name);
 		elem.setAttribute("id", ""+System.identityHashCode(obj));
 		
-		if (obj.getClass().isArray()) {
+		if (classObj.isArray()) {
 			int len = Array.getLength(obj);
 			elem.setAttribute("length", ""+len);
 

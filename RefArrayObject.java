@@ -3,10 +3,6 @@ public class RefArrayObject {
 	private Object anArray[];
 	
 	public RefArrayObject() {
-		anArray = new Object[5];
-		for (int i=0; i<anArray.length; i++) {
-			anArray[i] = new BasicObject[i];
-		}
 	}
 	
 	public RefArrayObject(Object[] array) {

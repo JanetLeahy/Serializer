@@ -4,7 +4,6 @@ public class BasicObject {
 	private String aString;
 	
 	public BasicObject() {
-		
 	}
 	
 	public BasicObject(int i, String str) {

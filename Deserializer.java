@@ -1,5 +1,6 @@
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -82,6 +83,12 @@ public class Deserializer {
 				List<Element> fields = objectElem.getChildren();
 				for (Element fieldElem : fields) {
 					Field field = classObj.getDeclaredField(fieldElem.getAttributeValue("name"));
+					
+					if (Modifier.isFinal(field.getModifiers())) {
+						//avoids trying to set constant values
+						continue;
+					}
+					
 					field.setAccessible(true);
 
 					if (fieldElem.getChild("value") != null) {
