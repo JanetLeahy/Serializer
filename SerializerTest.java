@@ -9,6 +9,8 @@ public class SerializerTest {
 	/*
 	 * Try array length = 0
 	 * Null elements in array, references
+	 * 
+	 * circular references
 	 */
 	
 	@Before

@@ -68,7 +68,10 @@ public class Serializer {
 					Element refElem = new Element("reference");
 					refElem.addContent(""+System.identityHashCode(arrayItem));
 					elem.addContent(refElem);
-					objects.add(arrayItem);
+					if (!objects.contains(arrayItem)) {
+						//if clause deals with circular references
+						objects.add(arrayItem);
+					}
 				}
 			}
 			
@@ -131,7 +134,10 @@ public class Serializer {
 				Element refElem = new Element("reference");
 				refElem.addContent(content);
 				fieldElem.addContent(refElem);
-				objects.add(value);
+				if (!objects.contains(value)) {
+					//if clause deals with circular references
+					objects.add(value);
+				}
 			}
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();

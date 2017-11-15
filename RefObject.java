@@ -3,7 +3,6 @@ public class RefObject {
 	private Object anObj;
 	
 	public RefObject() {
-		anObj = new BasicObject(0, "");
 	}
 	
 	public RefObject(Object obj) {
