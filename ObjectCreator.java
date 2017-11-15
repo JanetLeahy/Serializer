@@ -13,6 +13,7 @@ public class ObjectCreator {
 	public static final int REF_OBJECT = 2;
 	public static final int BASIC_ARRAY_OBJECT = 3;
 	public static final int REF_ARRAY_OBJECT = 4;
+	public static final int REF_COLLECTION_OBJECT = 5;
 
 	public static void main(String[] args) {
 		String input = "";
@@ -70,6 +71,7 @@ public class ObjectCreator {
 		System.out.println(REF_OBJECT + " - RefObject");
 		System.out.println(BASIC_ARRAY_OBJECT + " - BasicArrayObject");
 		System.out.println(REF_ARRAY_OBJECT + " - RefArrayObject");
+		System.out.println(REF_COLLECTION_OBJECT + " - RefCollectionObject");
 		System.out.println("q - back to main menu");
 	}
 	
@@ -157,7 +159,30 @@ public class ObjectCreator {
 				}
 			}
 			obj = new RefArrayObject(array);
+		}
+		else if (type == REF_COLLECTION_OBJECT) {
+			System.out.println("Creating RefCollectionObject...");
+			int num = 0;
+			System.out.println("Enter number of items for the collection: ");
+			try {
+				num = Integer.parseInt(in.nextLine());
+			} catch (NumberFormatException e) {
+				System.out.println("Number format exception - using default value 0");
+			}
+			RefCollectionObject refCollectionObj = new RefCollectionObject();
 			
+			for (int i=0; i< num; i++) {
+				printObjectMenu();
+				System.out.println("Enter an object type to add to the collection: ");
+				try {
+					int subType = Integer.parseInt(in.nextLine());
+					refCollectionObj.addObj(createObject(subType, in));
+				} catch (NumberFormatException e) {
+					System.out.println("Number format exception - no object added");
+				}
+			}
+			
+			obj = refCollectionObj;
 		}
 		
 
