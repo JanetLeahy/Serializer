@@ -22,7 +22,7 @@ public class Serializer {
 		objects.add(obj);
 		
 		while (written < objects.size()) {
-			root.addContent(writeObject(objects.get(objects.size()-1)));
+			root.addContent(writeObject(objects.get(written)));
 			written++;
 		}
 

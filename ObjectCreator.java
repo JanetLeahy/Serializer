@@ -72,7 +72,7 @@ public class ObjectCreator {
 		System.out.println(BASIC_ARRAY_OBJECT + " - BasicArrayObject");
 		System.out.println(REF_ARRAY_OBJECT + " - RefArrayObject");
 		System.out.println(REF_COLLECTION_OBJECT + " - RefCollectionObject");
-		System.out.println("q - back to main menu");
+		//System.out.println("q - back to main menu");
 	}
 	
 	public static void printSerializeMenu() {
@@ -186,7 +186,7 @@ public class ObjectCreator {
 		}
 		
 
-		System.out.println(obj + "created");
+		System.out.println(obj + " created");
 		return obj;
 	}
 	
