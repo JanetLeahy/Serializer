@@ -1,11 +1,12 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Scanner;
+/*
+ * Assignment 3 for CPSC501, fall 2017
+ * 
+ * Janet Leahy, T03
+ * 10104311
+ * 
+ */
 
-import org.jdom2.Document;
-import org.jdom2.output.XMLOutputter;
+import java.util.Scanner;
 
 public class ObjectCreator {
 	public static final int BASIC_OBJECT = 1;
@@ -46,6 +47,9 @@ public class ObjectCreator {
 		//System.out.println("q - back to main menu");
 	}
 	
+	
+	//creates an object based on type constant, using the provided Scanner
+	// to prompt the user for field values
 	public Object createObject(int type, Scanner in) {
 		Object obj = null;
 		
@@ -144,7 +148,6 @@ public class ObjectCreator {
 					System.out.println("Number format exception - no object added");
 				}
 			}
-			
 			obj = refCollectionObj;
 		}
 		

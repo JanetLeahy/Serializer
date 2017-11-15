@@ -1,3 +1,13 @@
+/*
+ * Assignment 3 for CPSC501, fall 2017
+ * 
+ * Janet Leahy, T03
+ * 10104311
+ * 
+ */
+
+
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -7,8 +17,6 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import org.jdom2.Document;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.XMLOutputter;
 
 public class Sender {

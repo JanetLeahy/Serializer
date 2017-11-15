@@ -17,6 +17,8 @@ public class RefObject {
 		this.anObj = anObj;
 	}
 	
+	//note: this toString results in an infinite loop when circular
+	// references occur
 	public String toString() {
 		return "RefObject(" + anObj + ")";
 	}

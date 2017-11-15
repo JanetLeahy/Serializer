@@ -3,10 +3,7 @@ public class BasicArrayObject {
 	private int[] anArray;
 
 	public BasicArrayObject() {
-		anArray = new int[5]; 
-		for (int i=0; i<5; i++) {
-			anArray[i] = i;
-		}
+		anArray = new int[0];
 	}
 	
 	public BasicArrayObject(int[] array) {

@@ -1,4 +1,11 @@
-import java.io.File;
+/*
+ * Assignment 3 for CPSC501, fall 2017
+ * 
+ * Janet Leahy, T03
+ * 10104311
+ * 
+ */
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,12 +27,11 @@ public class Receiver {
 			int portNum = Integer.parseInt(args[0]);
 			ServerSocket server = new ServerSocket(portNum);
 
+			//server only handles a single connection before closing
 			Socket sender = server.accept();
-
 
 			SAXBuilder in = new SAXBuilder();
 			Document document = in.build(sender.getInputStream());
-			
 			
 			Deserializer deserializer = new Deserializer();
 			Object obj = deserializer.deserialize(document);
@@ -53,7 +59,6 @@ public class Receiver {
 		} catch (IOException e) {
 			System.out.println("Error occured with server socket. Exiting.");
 			e.printStackTrace();
-			return;
 		}
 	}
 

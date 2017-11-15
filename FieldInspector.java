@@ -1,7 +1,5 @@
 import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -11,8 +9,6 @@ import java.util.LinkedList;
  * Janet Leahy, 10104311, T03
  * 
  * Main class, containing the method used to perform the inspections
- * 
- * @author Janet Leahy
  * 
  *
  */
@@ -71,23 +67,7 @@ public class FieldInspector {
 	public void printHeader(Object obj) {
 		Class classObj = obj.getClass();
 		System.out.print("class " + classObj.getName());
-		
-		//prints the direct superclass and any interfaces
-		Class superclass = classObj.getSuperclass();
-		if (superclass != null) {
-			System.out.print(" extends " + superclass.getName());
-		}
-		
-		Class[] interfaces = classObj.getInterfaces();
-		if (interfaces.length > 0) {
-			System.out.print(" implements");
-			for (int i=0; i< interfaces.length; i++) {
-				if (i > 0) {
-					System.out.print(",");
-				}
-				System.out.print(" " + interfaces[i].getName());
-			}
-		}
+	
 	}
 	
 	
@@ -103,10 +83,7 @@ public class FieldInspector {
 		for (int i=0; i < ownFields.length; i++) {
 			fields.add(ownFields[i]);
 		}
-		
-		addInterfaceFields(fields, classObj);
-		addSuperclassFields(fields, classObj);
-		
+				
 		for (int i=0; i< fields.size(); i++) {
 			//indent the fields for readability
 			System.out.print("\t");
@@ -240,35 +217,5 @@ public class FieldInspector {
 		}
 	}
 	
-	//reads any fields from the object's interfaces and adds them to the list
-	// of available fields for the original object
-	public void addInterfaceFields(ArrayList<Field> fields, Class classObj) {
-		Class[] interfaces = classObj.getInterfaces();
-		
-		for (int i=0; i<interfaces.length; i++) {
-			Field[] interfaceFields = interfaces[i].getDeclaredFields();
-			for (int j=0; j<interfaceFields.length; j++) {
-				fields.add(interfaceFields[j]);
-			}
-		}
-	}
-	
-	//reads any fields from the object's superclass and adds them to the list
-	// of available fields for the original object. If given class does not
-	// inherit directly from Object, search recursively and add its superclass'
-	// superclasses' fields to the list
-	public void addSuperclassFields(ArrayList<Field> fields, Class classObj) {
-		Class superClass = classObj.getSuperclass();
-		Field[] superFields = superClass.getDeclaredFields();
-				
-		for (int i=0; i<superFields.length; i++) {
-			fields.add(superFields[i]);
-		}
-		
-		//if a higher superclass exists, recursively add its fields too
-		if (!superClass.equals(Object.class)) {
-			addSuperclassFields(fields, superClass);
-		}
-	}
 	
 }

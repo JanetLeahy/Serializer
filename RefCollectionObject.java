@@ -23,6 +23,7 @@ public class RefCollectionObject {
 		return aList.size();
 	}
 	
+	//note: can cause infinite loop when circular references occur
 	public String toString() {
 		String str = "RefCollectionObject(<";
 		int i=0;

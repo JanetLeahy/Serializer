@@ -1,3 +1,11 @@
+/*
+ * Assignment 3 for CPSC501, fall 2017
+ * 
+ * Janet Leahy, T03
+ * 10104311
+ * 
+ */
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

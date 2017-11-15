@@ -1,29 +1,16 @@
+/*
+ * Assignment 3 for CPSC501, fall 2017
+ * 
+ * Janet Leahy, T03
+ * 10104311
+ * 
+ */
+
 import static org.junit.Assert.*;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
-import org.jdom2.output.XMLOutputter;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
+
 public class SerializerTest {
-
-	/*
-	 * Try array length = 0
-	 * Null elements in array, references
-	 * 
-	 * circular references
-	 */
-	
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
 
 	@Test
 	public void testBasicObject() throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchFieldException, SecurityException {
@@ -51,6 +38,16 @@ public class SerializerTest {
 		Deserializer d = new Deserializer();
 		
 		BasicArrayObject obj = new BasicArrayObject(new int[] {1,2,3,4,5});
+		
+		assertTrue(d.deserialize(s.serialize(obj)).toString().equals(obj.toString()));
+	}
+	
+	@Test
+	public void testEmptyConstructor() throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchFieldException, SecurityException {
+		Serializer s = new Serializer();
+		Deserializer d = new Deserializer();
+		
+		BasicArrayObject obj = new BasicArrayObject();
 		
 		assertTrue(d.deserialize(s.serialize(obj)).toString().equals(obj.toString()));
 	}

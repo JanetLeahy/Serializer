@@ -3,6 +3,7 @@ public class RefArrayObject {
 	private Object anArray[];
 	
 	public RefArrayObject() {
+		anArray = new Object[0];
 	}
 	
 	public RefArrayObject(Object[] array) {
