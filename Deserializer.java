@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,55 +18,101 @@ public class Deserializer {
 		List<Element> objectElems = document.getRootElement().getChildren();
 		
 		//starts by creating empty versions of all objects and adding them to
-		// the main HashMap, using id as the key
+		// the main HashMap, using id as the key (so they can be used to fill
+		// in any references)
 		for (Element objectElem : objectElems) {
 			Class classObj = Class.forName(objectElem.getAttributeValue("class"));
-			Object obj = classObj.newInstance();
+			Object obj = null;
+			if (classObj.isArray()) {
+				int len = Integer.parseInt(objectElem.getAttributeValue("length"));
+				obj = Array.newInstance(classObj.getComponentType(), len);
+			} 
+			else {
+				obj = classObj.newInstance();
+			}
 			String id = objectElem.getAttributeValue("id");
 			
 			objects.put(id, obj);
 		}
-		
-		
+
+
 		// parses through the list a second time and fills in all of the fields
 		for (Element objectElem : objectElems) {
 			Class classObj = Class.forName(objectElem.getAttributeValue("class"));
 			Object obj = objects.get(objectElem.getAttributeValue("id"));
 
-			List<Element> fields = objectElem.getChildren();
-			for (Element fieldElem : fields) {
-				Field field = classObj.getDeclaredField(fieldElem.getAttributeValue("name"));
-				field.setAccessible(true);
-
-				if (fieldElem.getChild("value") != null) {
-					Class valueType = field.getType();
-					String value = fieldElem.getChild("value").getText();
+			//if it has a length attribute, it is an array
+			if (classObj.isArray()) {
+				List<Element> elems = objectElem.getChildren();
+				Class valueType = classObj.getComponentType();
+				int i = 0;
+				
+				for (Element elem : elems) {
+					String value = elem.getText();
 
 					if (valueType == Integer.TYPE) {
-						field.set(obj, Integer.parseInt(value));
+						Array.set(obj, i, Integer.parseInt(value));
 					} else if (valueType == Double.TYPE) {
-						field.set(obj, Double.parseDouble(value));
+						Array.set(obj, i, Double.parseDouble(value));
 					} else if (valueType == Short.TYPE) {
-						field.set(obj, Short.parseShort(value));
+						Array.set(obj, i, Short.parseShort(value));
 					} else if (valueType == Long.TYPE) {
-						field.set(obj, Long.parseLong(value));
+						Array.set(obj, i, Long.parseLong(value));
 					} else if (valueType == Float.TYPE) {
-						field.set(obj, Float.parseFloat(value));
+						Array.set(obj, i, Float.parseFloat(value));
 					} else if (valueType == Boolean.TYPE) {
-						field.set(obj, Boolean.parseBoolean(value));
+						Array.set(obj, i, Boolean.parseBoolean(value));
 					} else if (valueType == Character.TYPE) {
-						field.set(obj, value.charAt(0));
+						Array.set(obj, i, value.charAt(0));
 					} else if (valueType == Byte.TYPE) {
-						field.set(obj, Byte.parseByte(value));
+						Array.set(obj, i, Byte.parseByte(value));
 					} else if (valueType == String.class) {
-						field.set(obj, value);
+						Array.set(obj, i, value);
+					}
+					else { // object is an array of object references
+						Array.set(obj, i, objects.get(value));
+					}
+					//increment the array index
+					i++;
+				}
+				
+			}
+			//otherwise, read and fill in any fields
+			else {
+				List<Element> fields = objectElem.getChildren();
+				for (Element fieldElem : fields) {
+					Field field = classObj.getDeclaredField(fieldElem.getAttributeValue("name"));
+					field.setAccessible(true);
+
+					if (fieldElem.getChild("value") != null) {
+						Class valueType = field.getType();
+						String value = fieldElem.getChild("value").getText();
+
+						if (valueType == Integer.TYPE) {
+							field.set(obj, Integer.parseInt(value));
+						} else if (valueType == Double.TYPE) {
+							field.set(obj, Double.parseDouble(value));
+						} else if (valueType == Short.TYPE) {
+							field.set(obj, Short.parseShort(value));
+						} else if (valueType == Long.TYPE) {
+							field.set(obj, Long.parseLong(value));
+						} else if (valueType == Float.TYPE) {
+							field.set(obj, Float.parseFloat(value));
+						} else if (valueType == Boolean.TYPE) {
+							field.set(obj, Boolean.parseBoolean(value));
+						} else if (valueType == Character.TYPE) {
+							field.set(obj, value.charAt(0));
+						} else if (valueType == Byte.TYPE) {
+							field.set(obj, Byte.parseByte(value));
+						} else if (valueType == String.class) {
+							field.set(obj, value);
+						}
+					}
+					else if (fieldElem.getChild("reference") != null) {
+						String refNum = fieldElem.getChild("reference").getText();
+						field.set(obj, objects.get(refNum));
 					}
 				}
-				else if (fieldElem.getChild("reference") != null) {
-					String refNum = fieldElem.getChild("reference").getText();
-					field.set(obj, objects.get(refNum));
-				}
-
 			}
 
 		}
