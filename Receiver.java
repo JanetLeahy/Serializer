@@ -30,7 +30,9 @@ public class Receiver {
 			Deserializer deserializer = new Deserializer();
 			Object obj = deserializer.deserialize(document);
 
-			System.out.println(obj);
+			//System.out.println(obj);
+			FieldInspector inspector = new FieldInspector();
+			inspector.inspect(obj, true);
 			
 			sender.close();
 			server.close();
