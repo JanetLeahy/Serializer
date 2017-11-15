@@ -8,7 +8,6 @@ import org.jdom2.Document;
 import org.jdom2.output.XMLOutputter;
 
 public class ObjectCreator {
-	public static final String FILENAME = "output.xml";
 	public static final int BASIC_OBJECT = 1;
 	public static final int REF_OBJECT = 2;
 	public static final int BASIC_ARRAY_OBJECT = 3;
@@ -205,7 +204,7 @@ public class ObjectCreator {
 			
 			if (input.equals("f")) {
 				System.out.println("Saving to file...");
-				out.output(document, new FileOutputStream(new File(FILENAME)));
+				out.output(document, new FileOutputStream(new File(Sender.FILENAME)));
 				break;
 			}
 			if (input.equals("d")) {

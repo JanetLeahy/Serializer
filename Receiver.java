@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -8,20 +10,33 @@ import org.jdom2.input.SAXBuilder;
 public class Receiver {
 
 	public static void main(String[] args) {
-		SAXBuilder in = new SAXBuilder();
+		
+		if (args.length != 1) {
+			System.out.println("Usage: java Receiver <port_number>");
+			return;
+		}
+		
 		try {
-			Document document = in.build(new File(ObjectCreator.FILENAME));
+			int portNum = Integer.parseInt(args[0]);
+			ServerSocket server = new ServerSocket(portNum);
+
+			Socket sender = server.accept();
+
+
+			SAXBuilder in = new SAXBuilder();
+			Document document = in.build(sender.getInputStream());
+			
 			
 			Deserializer deserializer = new Deserializer();
 			Object obj = deserializer.deserialize(document);
-			
-			//Inspector inspector = new Inspector();
-			//inspector.inspect(obj, true);
+
 			System.out.println(obj);
 			
+			sender.close();
+			server.close();
+
+
 		} catch (JDOMException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
@@ -32,8 +47,11 @@ public class Receiver {
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Error occured with server socket. Exiting.");
+			e.printStackTrace();
+			return;
 		}
 	}
 
