@@ -1,26 +1,29 @@
 import java.lang.reflect.Field;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
 
 import org.jdom2.*;
 
 
 public class Serializer {
-	static LinkedList<Object> objects;
+	ArrayList<Object> objects;
 	
-	public static org.jdom2.Document serialize(Object obj) {
-		objects = new LinkedList<Object>();
-		
+	public Serializer() {
+		objects = new ArrayList<Object>();
+	}
+	
+	public org.jdom2.Document serialize(Object obj) {
+		objects.clear();
+		int written = 0;
 		Document document = new Document();
 		
 		Element root = new Element("serialized");
 		
 		objects.add(obj);
 		
-		while (!objects.isEmpty()) {
-			root.addContent(writeObject(objects.removeFirst()));
+		while (written < objects.size()) {
+			root.addContent(writeObject(objects.get(objects.size()-1)));
+			written++;
 		}
-		
 
 		document.setRootElement(root);
 		
@@ -28,7 +31,7 @@ public class Serializer {
 	}
 	
 	
-	public static Element writeObject(Object obj) {
+	public Element writeObject(Object obj) {
 		Element elem = new Element("object");
 		
 		//reflectively determine object name
@@ -46,7 +49,7 @@ public class Serializer {
 		return elem;
 	}
 	
-	public static Element writeField(Field field, Object obj) {
+	public Element writeField(Field field, Object obj) {
 		Element fieldElem = new Element("field");
 		fieldElem.setAttribute("name", field.getName());
 		fieldElem.setAttribute("declaringclass", obj.getClass().getName());

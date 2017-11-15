@@ -11,6 +11,8 @@ public class ObjectCreator {
 	public static final String FILENAME = "output.xml";
 	public static final int BASIC_OBJECT = 1;
 	public static final int REF_OBJECT = 2;
+	public static final int BASIC_ARRAY_OBJECT = 3;
+	public static final int REF_ARRAY_OBJECT = 4;
 
 	public static void main(String[] args) {
 		String input = "";
@@ -66,6 +68,8 @@ public class ObjectCreator {
 		System.out.println("The following objects are available: ");
 		System.out.println(BASIC_OBJECT + " - BasicObject");
 		System.out.println(REF_OBJECT + " - RefObject");
+		System.out.println(BASIC_ARRAY_OBJECT + " - BasicArrayObject");
+		System.out.println(REF_ARRAY_OBJECT + " - RefArrayObject");
 		System.out.println("q - back to main menu");
 	}
 	
@@ -108,9 +112,29 @@ public class ObjectCreator {
 			}
 			Object subObj = createObject(subType, in);
 			obj = new RefObject(subObj);
-			
 		}
-		
+		else if (type == BASIC_ARRAY_OBJECT) {
+			System.out.println("Creating BasicArrayObject...");
+			int len = 0;
+			System.out.println("Enter a length for anArray: ");
+			try {
+				len = Integer.parseInt(in.nextLine());
+			} catch (NumberFormatException e) {
+				System.out.println("Number format exception - using default length 0");
+			}
+			int[] array = new int[len];
+			for (int i=0; i< len; i++) {
+				System.out.println("Enter an integer value for anArray[" + i + "]: ");
+				try {
+					array[i] = Integer.parseInt(in.nextLine());
+				} catch (NumberFormatException e) {
+					System.out.println("Number format exception - using default value 0");
+					array[i] = 0;
+				}
+			}
+			obj = new BasicArrayObject(array);
+		}
+
 		System.out.println(obj + "created");
 		return obj;
 	}
@@ -118,7 +142,8 @@ public class ObjectCreator {
 	
 	public static void serializeObject(Object obj, Scanner in) throws FileNotFoundException, IOException {
 		System.out.println("Serializing object...");
-		Document document = Serializer.serialize(obj);
+		Serializer serializer = new Serializer();
+		Document document = serializer.serialize(obj);
 		XMLOutputter out = new XMLOutputter();
 		
 		printSerializeMenu();
