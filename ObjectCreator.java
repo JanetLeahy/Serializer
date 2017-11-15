@@ -1,6 +1,14 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Scanner;
 
+import org.jdom2.Document;
+import org.jdom2.output.XMLOutputter;
+
 public class ObjectCreator {
+	public static final String FILENAME = "output.xml";
 	public static final int BASIC_OBJECT = 1;
 
 	public static void main(String[] args) {
@@ -22,10 +30,13 @@ public class ObjectCreator {
 						type = Integer.parseInt(typeStr);
 						//passes the scanner as a parameter for the function
 						// to use to obtain field values
-						createObject(type, in);
+						Object obj = createObject(type, in);
+						serializeObject(obj, in);
 						break;
 					} catch (NumberFormatException e) {
 						//do nothing - continue in loop
+					} catch(IOException e) {
+						e.printStackTrace();
 					}
 				}
 				System.out.println("Returning to main menu...");
@@ -56,6 +67,14 @@ public class ObjectCreator {
 		System.out.println("q - back to main menu");
 	}
 	
+	public static void printSerializeMenu() {
+		System.out.println("What to do with the XML file?");
+		System.out.println("f - save to a file");
+		System.out.println("d - display to console");
+		System.out.println("s - send over network connection");
+		System.out.println("q - return to main menu");
+	}
+	
 	public static Object createObject(int type, Scanner in) {
 		Object obj = null;
 		
@@ -69,7 +88,6 @@ public class ObjectCreator {
 			} catch (NumberFormatException e) {
 				System.out.println("Number format exception - using default value 0.");
 			}
-			
 			System.out.println("Enter value for String aString: ");
 			aString = in.nextLine();
 			
@@ -79,5 +97,34 @@ public class ObjectCreator {
 		
 		
 		return obj;
+	}
+	
+	
+	public static void serializeObject(Object obj, Scanner in) throws FileNotFoundException, IOException {
+		System.out.println("Serializing object...");
+		Document document = Serializer.serialize(obj);
+		XMLOutputter out = new XMLOutputter();
+		
+		printSerializeMenu();
+		
+		String input = "";
+		while (!input.equals("q")) {
+			input = in.nextLine();
+			
+			if (input.equals("f")) {
+				System.out.println("Saving to file...");
+				out.output(document, new FileOutputStream(new File(FILENAME)));
+				break;
+			}
+			if (input.equals("d")) {
+				System.out.println("Displaying file");
+				System.out.println(out.outputString(document));
+				break;
+			}
+			if (input.equals("s")) {
+				System.out.println("Sending over network");
+				break;
+			}
+		}
 	}
 }
