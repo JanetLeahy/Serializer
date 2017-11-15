@@ -68,6 +68,7 @@ public class Serializer {
 					Element refElem = new Element("reference");
 					refElem.addContent(""+System.identityHashCode(arrayItem));
 					elem.addContent(refElem);
+					objects.add(arrayItem);
 				}
 			}
 			

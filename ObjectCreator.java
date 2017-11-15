@@ -104,13 +104,14 @@ public class ObjectCreator {
 			System.out.println("Creating RefObject...");
 			printObjectMenu();
 			System.out.println("Enter a type for Object anObj: ");
-			int subType = BASIC_OBJECT;
+			Object subObj = null;
 			try {
-				subType = Integer.parseInt(in.nextLine());
+				int subType = Integer.parseInt(in.nextLine());
+				subObj = createObject(subType, in);
 			} catch (NumberFormatException e) {
-				System.out.println("Number format exception - creating a default BasicObject.");
+				System.out.println("Number format exception - using default value null");
 			}
-			Object subObj = createObject(subType, in);
+			
 			obj = new RefObject(subObj);
 		}
 		else if (type == BASIC_ARRAY_OBJECT) {
@@ -134,6 +135,31 @@ public class ObjectCreator {
 			}
 			obj = new BasicArrayObject(array);
 		}
+		else if (type == REF_ARRAY_OBJECT) {
+			System.out.println("Creating RefArrayObject...");
+			int len = 0;
+			System.out.println("Enter a length for anArray: ");
+			try {
+				len = Integer.parseInt(in.nextLine());
+			} catch (NumberFormatException e) {
+				System.out.println("Number format exception - using default length 0");
+			}
+			Object[] array = new Object[len];
+			for (int i=0; i< len; i++) {
+				printObjectMenu();
+				System.out.println("Enter a type for anArray[" + i + "]: ");
+				try {
+					int subType = Integer.parseInt(in.nextLine());
+					array[i] = createObject(subType, in);
+				} catch (NumberFormatException e) {
+					System.out.println("Number format exception - using default value null");
+					array[i] = null;
+				}
+			}
+			obj = new RefArrayObject(array);
+			
+		}
+		
 
 		System.out.println(obj + "created");
 		return obj;

@@ -8,6 +8,10 @@ public class RefArrayObject {
 			anArray[i] = new BasicObject[i];
 		}
 	}
+	
+	public RefArrayObject(Object[] array) {
+		anArray = array;
+	}
 
 	public Object getArrayObj(int index) {
 		return anArray[index];
@@ -17,5 +21,17 @@ public class RefArrayObject {
 		if (index >= 0 && index < anArray.length) {
 			anArray[index] = anObj;
 		}
+	}
+	
+	public String toString() {
+		String str = "RefArrayObject([";
+		int i=0;
+		for (; i<anArray.length - 1; i++) {
+			str += anArray[i] + ", ";
+		}
+		if (anArray.length > 0) {
+			str += anArray[i] ;
+		}
+		return str + "])";
 	}
 }
