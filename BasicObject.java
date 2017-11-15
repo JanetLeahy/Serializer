@@ -23,6 +23,10 @@ public class BasicObject {
 	public void setString(String str) {
 		aString = str;
 	}
+	
+	public String toString() {
+		return "BasicObject(" + anInt + ", " + aString + ")";
+	}
 
 	
 }

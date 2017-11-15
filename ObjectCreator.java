@@ -10,6 +10,7 @@ import org.jdom2.output.XMLOutputter;
 public class ObjectCreator {
 	public static final String FILENAME = "output.xml";
 	public static final int BASIC_OBJECT = 1;
+	public static final int REF_OBJECT = 2;
 
 	public static void main(String[] args) {
 		String input = "";
@@ -64,6 +65,7 @@ public class ObjectCreator {
 	public static void printObjectMenu() {
 		System.out.println("The following objects are available: ");
 		System.out.println(BASIC_OBJECT + " - BasicObject");
+		System.out.println(REF_OBJECT + " - RefObject");
 		System.out.println("q - back to main menu");
 	}
 	
@@ -79,6 +81,7 @@ public class ObjectCreator {
 		Object obj = null;
 		
 		if (type == BASIC_OBJECT) {
+			System.out.println("Creating BasicObject...");
 			//set fields
 			int anInt = 0;
 			String aString = "";
@@ -92,10 +95,23 @@ public class ObjectCreator {
 			aString = in.nextLine();
 			
 			obj = new BasicObject(anInt, aString);
-			System.out.println("BasicObject(" + anInt + ", " + aString + ") created");
+		}
+		else if (type == REF_OBJECT) {
+			System.out.println("Creating RefObject...");
+			printObjectMenu();
+			System.out.println("Enter a type for Object anObj: ");
+			int subType = BASIC_OBJECT;
+			try {
+				subType = Integer.parseInt(in.nextLine());
+			} catch (NumberFormatException e) {
+				System.out.println("Number format exception - creating a default BasicObject.");
+			}
+			Object subObj = createObject(subType, in);
+			obj = new RefObject(subObj);
+			
 		}
 		
-		
+		System.out.println(obj + "created");
 		return obj;
 	}
 	

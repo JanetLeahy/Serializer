@@ -56,7 +56,6 @@ public class Serializer {
 			field.setAccessible(true);
 			value = field.get(obj);
 			String content = "";
-			System.out.println(field.getType());
 
 			if (value != null && (field.getType().isPrimitive() || field.getType() == String.class)) {
 				if (value.getClass() == Integer.class) {
