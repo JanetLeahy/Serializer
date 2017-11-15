@@ -3,6 +3,10 @@ public class BasicObject {
 	private int anInt;
 	private String aString;
 	
+	public BasicObject() {
+		
+	}
+	
 	public BasicObject(int i, String str) {
 		anInt = i;
 		aString = str;
