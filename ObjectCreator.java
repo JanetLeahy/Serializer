@@ -14,54 +14,26 @@ public class ObjectCreator {
 	public static final int REF_ARRAY_OBJECT = 4;
 	public static final int REF_COLLECTION_OBJECT = 5;
 
-	public static void main(String[] args) {
-		String input = "";
-		Scanner in = new Scanner(System.in);
-		System.out.println("Object creator started. Type h<enter> for help.");
+	public Object createObjectLoop(Scanner in) {
+		Object obj = null;
 		
-		while (!input.equals("q")) {
-			input = in.nextLine();
-			
-			if (input.equals("c")) {
-				printObjectMenu();
+		printObjectMenu();
 
-				String typeStr = "";
-				int type;
-				while (!typeStr.equals("q")) {
-					typeStr = in.nextLine();
-					try {
-						type = Integer.parseInt(typeStr);
-						//passes the scanner as a parameter for the function
-						// to use to obtain field values
-						Object obj = createObject(type, in);
-						serializeObject(obj, in);
-						break;
-					} catch (NumberFormatException e) {
-						//do nothing - continue in loop
-					} catch(IOException e) {
-						e.printStackTrace();
-					}
-				}
-				System.out.println("Returning to main menu...");
-			}
-			
-			if (input.equals("h")) {
-				printHelp();
+		String typeStr = "";
+		int type;
+		while (!typeStr.equals("q")) {
+			typeStr = in.nextLine();
+			try {
+				type = Integer.parseInt(typeStr);
+				//passes the scanner as a parameter for the function
+				// to use to obtain field values
+				obj = createObject(type, in);
+				break;
+			} catch (NumberFormatException e) {
+				//do nothing - continue in loop
 			}
 		}
-		
-		System.out.println("Exiting the program...");
-		in.close();
-
-	}
-
-	
-	public static void printHelp() {
-		System.out.println("The following text commands are available: ");
-		System.out.println("c - create an object");
-		System.out.println("h - help (display commands)");
-		System.out.println("q - quit");
-		
+		return obj;
 	}
 	
 	public static void printObjectMenu() {
@@ -74,15 +46,7 @@ public class ObjectCreator {
 		//System.out.println("q - back to main menu");
 	}
 	
-	public static void printSerializeMenu() {
-		System.out.println("What to do with the XML file?");
-		System.out.println("f - save to a file");
-		System.out.println("d - display to console");
-		System.out.println("s - send over network connection");
-		System.out.println("q - return to main menu");
-	}
-	
-	public static Object createObject(int type, Scanner in) {
+	public Object createObject(int type, Scanner in) {
 		Object obj = null;
 		
 		if (type == BASIC_OBJECT) {
@@ -184,38 +148,10 @@ public class ObjectCreator {
 			obj = refCollectionObj;
 		}
 		
-
 		System.out.println(obj + " created");
 		return obj;
 	}
 	
 	
-	public static void serializeObject(Object obj, Scanner in) throws FileNotFoundException, IOException {
-		System.out.println("Serializing object...");
-		Serializer serializer = new Serializer();
-		Document document = serializer.serialize(obj);
-		XMLOutputter out = new XMLOutputter();
-		
-		printSerializeMenu();
-		
-		String input = "";
-		while (!input.equals("q")) {
-			input = in.nextLine();
-			
-			if (input.equals("f")) {
-				System.out.println("Saving to file...");
-				out.output(document, new FileOutputStream(new File(Sender.FILENAME)));
-				break;
-			}
-			if (input.equals("d")) {
-				System.out.println("Displaying file");
-				System.out.println(out.outputString(document));
-				break;
-			}
-			if (input.equals("s")) {
-				System.out.println("Sending over network");
-				break;
-			}
-		}
-	}
+
 }
